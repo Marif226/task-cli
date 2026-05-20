@@ -52,6 +52,7 @@ func main() {
 	cmds := []Command{
 		command.NewAddCommand(taskStorage),
 		command.NewDeleteCommand(taskStorage),
+		command.NewListCommand(taskStorage),
 	}
 
 	for _, cmd := range cmds {

@@ -63,6 +63,28 @@ func (t *Task) Delete(id int) error {
 	return fmt.Errorf("task with ID %d not found", id)
 }
 
+// List returns all tasks from the storage.
+func (t *Task) List(status entity.TaskStatus) ([]entity.Task, error) {
+	taskStorage, err := t.loadStorage()
+	if err != nil {
+		return nil, err
+	}
+
+	tasks := make([]entity.Task, 0)
+
+	if status != "" {
+		for i := range taskStorage.Tasks {
+			if taskStorage.Tasks[i].Status == status {
+				tasks = append(tasks, taskStorage.Tasks[i])
+			}
+		}
+	} else {
+		tasks = taskStorage.Tasks
+	}
+
+	return tasks, nil
+}
+
 // loadStorage reads the task storage from the JSON file and returns it as a TaskStorage struct.
 // If the file does not exist, it returns an empty TaskStorage struct.
 func (t *Task) loadStorage() (*entity.TaskStorage, error) {
