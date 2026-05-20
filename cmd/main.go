@@ -9,6 +9,7 @@ import (
 )
 
 const (
+	tasksDirPath  = "tasks"
 	tasksFilePath = "tasks/tasks.json"
 )
 
@@ -20,7 +21,7 @@ type Command interface {
 }
 
 func main() {
-	err := os.MkdirAll("tasks", 0755)
+	err := os.MkdirAll(tasksDirPath, 0755)
 	if err != nil {
 		fmt.Printf("Error creating tasks directory: %s\n", err)
 		os.Exit(1)
