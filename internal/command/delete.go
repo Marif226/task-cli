@@ -17,7 +17,7 @@ type Delete struct {
 	taskStorage taskDeleter
 }
 
-// NewDeleteCommand creates a delete command that deletes tasks from storage.
+// NewDeleteCommand returns a new delete command.
 func NewDeleteCommand(taskStorage taskDeleter) *Delete {
 	rc := &Delete{
 		fs:          flag.NewFlagSet("delete", flag.ContinueOnError),
@@ -32,7 +32,7 @@ func (r *Delete) Name() string {
 	return r.fs.Name()
 }
 
-// Init parses command arguments and stores the task description.
+// Init parses command arguments and stores the task ID to delete.
 func (r *Delete) Init(args []string) error {
 	err := r.fs.Parse(args)
 	if err != nil {
@@ -53,7 +53,7 @@ func (r *Delete) Init(args []string) error {
 	return nil
 }
 
-// Run deletes a task using the parsed description.
+// Run deletes a task using the parsed task ID.
 func (r *Delete) Run() error {
 	if r.id == 0 {
 		return fmt.Errorf("task ID is required")

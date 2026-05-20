@@ -16,7 +16,7 @@ type Add struct {
 	taskStorage taskCreator
 }
 
-// NewAddCommand creates an add command that stores tasks in taskStorage.
+// NewAddCommand returns a new add command.
 func NewAddCommand(taskStorage taskCreator) *Add {
 	ac := &Add{
 		fs:          flag.NewFlagSet("add", flag.ContinueOnError),
