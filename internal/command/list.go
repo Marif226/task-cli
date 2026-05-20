@@ -14,7 +14,7 @@ type taskLister interface {
 // List handles the "list" sub-command.
 type List struct {
 	fs          *flag.FlagSet
-	status      string
+	status      entity.TaskStatus
 	taskStorage taskLister
 }
 
@@ -41,7 +41,12 @@ func (l *List) Init(args []string) error {
 	}
 
 	if l.fs.NArg() > 0 {
-		l.status = l.fs.Arg(0)
+		status, err := entity.ParseTaskStatus(l.fs.Arg(0))
+		if err != nil {
+			return err
+		}
+
+		l.status = status
 	}
 
 	return nil
@@ -49,7 +54,7 @@ func (l *List) Init(args []string) error {
 
 // Run lists the tasks using the parsed status filter if provided.
 func (l *List) Run() error {
-	tasks, err := l.taskStorage.List(entity.TaskStatus(l.status))
+	tasks, err := l.taskStorage.List(l.status)
 	if err != nil {
 		return err
 	}
