@@ -85,6 +85,30 @@ func (t *Task) List(status entity.TaskStatus) ([]entity.Task, error) {
 	return tasks, nil
 }
 
+// UpdateStatus updates the status of a task by its ID.
+func (t *Task) UpdateStatus(id int, status entity.TaskStatus) (*entity.Task, error) {
+	taskStorage, err := t.loadStorage()
+	if err != nil {
+		return nil, err
+	}
+
+	for i := range taskStorage.Tasks {
+		if taskStorage.Tasks[i].ID == id {
+			taskStorage.Tasks[i].Status = status
+			taskStorage.Tasks[i].UpdatedAt = time.Now()
+
+			err = t.atomicSave(taskStorage)
+			if err != nil {
+				return nil, err
+			}
+
+			return &taskStorage.Tasks[i], nil
+		}
+	}
+
+	return nil, fmt.Errorf("task with ID %d not found", id)
+}
+
 // loadStorage reads the task storage from the JSON file and returns it as a TaskStorage struct.
 // If the file does not exist, it returns an empty TaskStorage struct.
 func (t *Task) loadStorage() (*entity.TaskStorage, error) {
