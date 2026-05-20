@@ -69,10 +69,6 @@ func (m *Mark) Run() error {
 		return fmt.Errorf("task ID must be greater than 0")
 	}
 
-	if !m.status.IsValid() {
-		return fmt.Errorf("status is invalid")
-	}
-
 	_, err := m.taskStorage.UpdateStatus(m.id, m.status)
 	if err != nil {
 		return err
