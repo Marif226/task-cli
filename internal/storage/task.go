@@ -2,6 +2,7 @@ package storage
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"time"
 
@@ -44,6 +45,26 @@ func (t *Task) Create(description string) (int, error) {
 	return task.ID, nil
 }
 
+// Delete deletes a task by its ID.
+func (t *Task) Delete(id int) error {
+	taskStorage, err := t.loadStorage()
+	if err != nil {
+		return err
+	}
+
+	// Find the task by ID and delete it from the slice.
+	for i, task := range taskStorage.Tasks {
+		if task.ID == id {
+			taskStorage.Tasks = append(taskStorage.Tasks[:i], taskStorage.Tasks[i+1:]...)
+			return t.atomicSave(taskStorage)
+		}
+	}
+
+	return fmt.Errorf("task with ID %d not found", id)
+}
+
+// loadStorage reads the task storage from the JSON file and returns it as a TaskStorage struct.
+// If the file does not exist, it returns an empty TaskStorage struct.
 func (t *Task) loadStorage() (*entity.TaskStorage, error) {
 	data, err := os.ReadFile(t.filePath)
 	if err != nil {
@@ -62,6 +83,8 @@ func (t *Task) loadStorage() (*entity.TaskStorage, error) {
 	return &taskStorage, nil
 }
 
+// atomicSave writes the task storage to a temporary file and then renames it to the original file path.
+// This ensures that the file is updated atomically, preventing data corruption in case of a crash during the write operation.
 func (t *Task) atomicSave(taskStorage *entity.TaskStorage) error {
 	data, err := json.Marshal(taskStorage)
 	if err != nil {
