@@ -58,7 +58,7 @@ func (a *Add) Run() error {
 		return err
 	}
 
-	fmt.Printf("Task added succesfully (ID: %d)\n", id)
+	fmt.Printf("Task added successfully (ID: %d)\n", id)
 
 	return nil
 }
