@@ -110,7 +110,6 @@ func (t *Task) UpdateStatus(id int, status entity.TaskStatus) (*entity.Task, err
 }
 
 // loadStorage reads the task storage from the JSON file and returns it as a TaskStorage struct.
-// If the file does not exist, it returns an empty TaskStorage struct.
 func (t *Task) loadStorage() (*entity.TaskStorage, error) {
 	data, err := os.ReadFile(t.filePath)
 	if err != nil {
