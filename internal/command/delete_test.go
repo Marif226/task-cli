@@ -70,7 +70,7 @@ func TestDeleteRun(t *testing.T) {
 			if !tt.wantError && err != nil {
 				t.Fatalf("Run() unexpected error: %v", err)
 			}
-			if tt.id > 0 && storage.calledWith != tt.id && tt.wantError == false {
+			if tt.id > 0 && storage.calledWith != tt.id {
 				t.Fatalf("Delete() called with %d, want %d", storage.calledWith, tt.id)
 			}
 		})
