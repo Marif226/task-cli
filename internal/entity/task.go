@@ -18,14 +18,3 @@ type Task struct {
 	CreatedAt   time.Time  `json:"created_at"`
 	UpdatedAt   time.Time  `json:"updated_at"`
 }
-
-// NewTask creates a task with todo status.
-func NewTask(description string) *Task {
-	return &Task{
-		ID:          1,
-		Description: description,
-		Status:      TaskStatusToDo,
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
-	}
-}

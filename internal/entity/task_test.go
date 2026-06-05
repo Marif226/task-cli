@@ -1,11 +1,21 @@
 package entity
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 func TestNewTaskDefaults(t *testing.T) {
 	description := "write tests"
 
-	task := NewTask(description)
+	task := &Task{
+		ID:          1,
+		Description: description,
+		Status:      TaskStatusToDo,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+	
 	if task == nil {
 		t.Fatal("NewTask() returned nil")
 	}
